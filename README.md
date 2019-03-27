@@ -1,15 +1,15 @@
-#Createwifi
+# Createwifi
 Using the shortest codes and simplest params to create wifi hotspot
 
 I know there are plenty of programs can help to create WiFi hotspots, but most of them are complex to use and modify. 
 
-##Dependencies
+## Dependencies
 For Kali:
 ```
 apt install hostapd dnsmasq
 ```
 
-##Useage
+## Useage
 ```
 python createwifi.py -e "OpenWiFi"
 python createwifi.py -e "OpenWiFi" -i wlan0 -o eth0 -c channel
