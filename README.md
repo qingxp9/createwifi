@@ -11,9 +11,10 @@ apt install hostapd dnsmasq
 
 ## Useage
 ```
+#without password and Internet
 python createwifi.py -e "OpenWiFi"
-python createwifi.py -e "OpenWiFi" -i wlan0 -o eth0 -c channel
-
-python createwifi.py -e "WPAWiFi" -p 12345678
-python createwifi.py -e "WPAWiFi"  -i wlan0 -o eth0 -c channel -p 12345678
+#with password and Internet
+python createwifi.py -e "WPAWiFi" -p 12345678 -o eth0
+##All options
+python createwifi.py -e "WPAWiFi" -i wlan0 -o eth0 -c channel -p 12345678
 ```

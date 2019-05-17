@@ -14,7 +14,6 @@ def set_configs():
 
     parser.add_argument('-o',
                   dest='output',
-                  default='eth0',
                   type=str,
                   help='the interface of the output')
 
@@ -52,20 +51,20 @@ def set_configs():
     }
 def dnsmasq(iface):
     os.system("systemctl stop dnsmasq")
-    os.system("killall dnsmasq")
+    os.system("killall dnsmasq > /dev/null 2>&1")
     os.system("echo 'dhcp-range=172.5.10.100,172.5.10.250,12h' > dnsmasq.conf")
     os.system("echo 'interface=" + iface +"' >> dnsmasq.conf")
-    os.system("dnsmasq -C dnsmasq.conf  -l dnsmasq.leases")
+    os.system("ifconfig " + iface + " up")
+    os.system("dnsmasq -C dnsmasq.conf -l dnsmasq.leases")
 
 def iptables(iface, output):
-    os.system("ifconfig " + output + " up")
-    #os.system("dhclient " + output)
-    os.system("echo 1 > /proc/sys/net/ipv4/ip_forward")
-
     os.system("iptables -F")
     os.system("iptables -t nat -F")
-    os.system("ifconfig " + iface + " up")
-    os.system("iptables -t nat -A POSTROUTING -o " + output + " -j MASQUERADE")
+    if output:
+      os.system("echo 1 > /proc/sys/net/ipv4/ip_forward")
+      os.system("ifconfig " + output + " up")
+      os.system("dhclient " + output + " > /dev/null 2>&1")
+      os.system("iptables -t nat -A POSTROUTING -o " + output + " -j MASQUERADE")
 
 def hostapd(iface, essid, channel, password):
     # Make Configuration File
@@ -82,6 +81,7 @@ def hostapd(iface, essid, channel, password):
         os.system("echo 'wpa_passphrase=" + password + "' >> hostapd.conf")
 
     # Running hostapd
+    os.system("ifconfig " + iface + " up")
     os.system("nmcli radio wifi off")
     os.system("rfkill unblock wlan")
     os.system("ifconfig " + iface + " 172.5.10.1/24")
@@ -99,7 +99,7 @@ if __name__ == '__main__':
     dnsmasq(iface)
     #iptables
     iptables(iface, output)
-    #hostapd config
+    #create wifi
     hostapd(iface, essid, channel, password)
 
 
