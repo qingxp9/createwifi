@@ -61,10 +61,10 @@ def iptables(iface, output):
     os.system("iptables -F")
     os.system("iptables -t nat -F")
     if output:
-      os.system("echo 1 > /proc/sys/net/ipv4/ip_forward")
-      os.system("ifconfig " + output + " up")
-      os.system("dhclient " + output + " > /dev/null 2>&1")
-      os.system("iptables -t nat -A POSTROUTING -o " + output + " -j MASQUERADE")
+        os.system("echo 1 > /proc/sys/net/ipv4/ip_forward")
+        os.system("ifconfig " + output + " up")
+        os.system("dhclient " + output + " > /dev/null 2>&1")
+        os.system("iptables -t nat -A POSTROUTING -o " + output + " -j MASQUERADE")
 
 def hostapd(iface, essid, channel, password):
     # Make Configuration File
@@ -81,9 +81,9 @@ def hostapd(iface, essid, channel, password):
         os.system("echo 'wpa_passphrase=" + password + "' >> hostapd.conf")
 
     # Running hostapd
-    os.system("ifconfig " + iface + " up")
     os.system("nmcli radio wifi off")
     os.system("rfkill unblock wlan")
+    os.system("ifconfig " + iface + " up")
     os.system("ifconfig " + iface + " 172.5.10.1/24")
     os.system("hostapd hostapd.conf")
 
@@ -101,6 +101,3 @@ if __name__ == '__main__':
     iptables(iface, output)
     #create wifi
     hostapd(iface, essid, channel, password)
-
-
-
