@@ -52,8 +52,10 @@ def set_configs():
 def dnsmasq(iface):
     os.system("systemctl stop dnsmasq")
     os.system("killall dnsmasq > /dev/null 2>&1")
-    os.system("echo 'dhcp-range=172.5.10.100,172.5.10.250,12h' > dnsmasq.conf")
-    os.system("echo 'interface=" + iface +"' >> dnsmasq.conf")
+    if not os.path.exists("dnsmasq.conf"):
+        os.system("echo 'dhcp-range=172.5.10.100,172.5.10.250,12h' > dnsmasq.conf")
+        os.system("echo 'interface=" + iface +"' >> dnsmasq.conf")
+        os.system("echo '#address=/xxx.com/172.5.10.1' >> dnsmasq.conf")
     os.system("ifconfig " + iface + " up")
     os.system("dnsmasq -C dnsmasq.conf -l dnsmasq.leases")
 
