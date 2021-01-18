@@ -9,7 +9,7 @@ For Kali:
 apt install hostapd dnsmasq
 ```
 
-## Useage
+## Usage
 ```
 #without password and Internet
 python createwifi.py -e "OpenWiFi"
